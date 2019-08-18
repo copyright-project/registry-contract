@@ -6,7 +6,7 @@ import (
 )
 
 // Structure of the state
-// [instagram_id: string]: {
+// [media_id: string]: {
 //	  imageUrl: string
 //	  postUrl: string
 //	  postedAt: string
@@ -18,8 +18,8 @@ var PUBLIC = sdk.Export(registerMedia)
 
 func _init() {}
 
-func registerMedia(instagramID, metadata string) {
-	key := []byte(instagramID)
+func registerMedia(mediaID, metadata string) {
+	key := []byte(mediaID)
 	if state.ReadString(key) != "" {
 		panic("The record already exists")
 	}
