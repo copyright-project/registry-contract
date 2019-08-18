@@ -1,0 +1,1 @@
+gamma-cli deploy ./media-registry.go -name registry -signer user1 -env local
