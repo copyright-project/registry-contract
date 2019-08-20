@@ -14,6 +14,7 @@ import (
 //	  postUrl: string
 //	  postedAt: string
 //	  ownerId: string
+//	  hash: string
 // }
 
 var SYSTEM = sdk.Export(_init)
