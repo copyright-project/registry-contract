@@ -1,1 +1,1 @@
-gamma-cli deploy ./media-registry.go -name registry2 -signer user1 -env demonet
+gamma-cli deploy ./media-registry.go -name registry3 -signer user1 -env demonet
