@@ -1,4 +1,4 @@
-# Registry Contract
+# Registry Contract [![Build Status](https://travis-ci.org/copyright-project/registry-contract.svg?branch=master)](https://travis-ci.org/copyright-project/registry-contract)
 > Registry smart contract
 
 ## API
