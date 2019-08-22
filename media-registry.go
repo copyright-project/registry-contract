@@ -36,3 +36,5 @@ func registerMedia(mediaID, metadata string) {
 	}
 	state.WriteString(key, metadata)
 }
+
+func main() {}
