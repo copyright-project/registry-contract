@@ -2,23 +2,15 @@ package main
 
 import (
 	"bytes"
+	"strings"
 
 	"github.com/orbs-network/orbs-contract-sdk/go/sdk/v1"
 	"github.com/orbs-network/orbs-contract-sdk/go/sdk/v1/address"
 	"github.com/orbs-network/orbs-contract-sdk/go/sdk/v1/state"
 )
 
-// Structure of the state
-// [media_id: string]: {
-//	  imageUrl: string
-//	  postUrl: string
-//	  postedAt: string
-//	  ownerId: string
-//	  hash: string
-// }
-
 var SYSTEM = sdk.Export(_init)
-var PUBLIC = sdk.Export(registerMedia)
+var PUBLIC = sdk.Export(registerMedia, areRegistered)
 
 var OWNER_KEY = []byte("__CONTRACT_OWNER__")
 
@@ -26,12 +18,29 @@ func _init() {
 	state.WriteBytes(OWNER_KEY, address.GetCallerAddress())
 }
 
+func _isRegistered(id string) bool {
+	key := []byte(id)
+	return state.ReadString(key) != ""
+}
+
+func areRegistered(ids string) string {
+	res := ""
+	for _, id := range strings.Split(ids, ",") {
+		if _isRegistered(id) {
+			res = res + "1"
+		} else {
+			res = res + "0"
+		}
+	}
+	return res
+}
+
 func registerMedia(mediaID, metadata string) {
 	if !bytes.Equal(state.ReadBytes(OWNER_KEY), address.GetCallerAddress()) {
 		panic("Only contract owner can register media")
 	}
 	key := []byte(mediaID)
-	if state.ReadString(key) != "" {
+	if _isRegistered(mediaID) {
 		panic("The record already exists")
 	}
 	state.WriteString(key, metadata)

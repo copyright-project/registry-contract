@@ -24,3 +24,12 @@ func TestPanicWhenRegisteringSameMedia(t *testing.T) {
 		})
 	})
 }
+
+func TestAreRegistered(t *testing.T) {
+	InServiceScope(nil, nil, func(m Mockery) {
+		_init()
+		registerMedia("id1", "test-metadata")
+		registerMedia("id2", "test-metadata")
+		require.Equal(t, areRegistered("id1,id2,id3"), "110")
+	})
+}
