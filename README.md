@@ -8,9 +8,8 @@ Metadata object structure:
 ```ts
 [media_id: string]: {
     imageUrl: string
-    postUrl: string
     postedAt: string
-    ownerId: string
+    copyrightAttribution: string
     hash: string
 }
 ```
