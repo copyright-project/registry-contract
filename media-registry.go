@@ -15,7 +15,7 @@ var PUBLIC = sdk.Export(registerMedia, areRegistered)
 var OWNER_KEY = []byte("__CONTRACT_OWNER__")
 
 func _init() {
-	state.WriteBytes(OWNER_KEY, address.GetCallerAddress())
+	state.WriteBytes(OWNER_KEY, address.GetSignerAddress())
 }
 
 func _isRegistered(id string) bool {
@@ -36,7 +36,7 @@ func areRegistered(ids string) string {
 }
 
 func registerMedia(mediaID, metadata string) {
-	if !bytes.Equal(state.ReadBytes(OWNER_KEY), address.GetCallerAddress()) {
+	if !bytes.Equal(state.ReadBytes(OWNER_KEY), address.GetSignerAddress()) {
 		panic("Only contract owner can register media")
 	}
 	key := []byte(mediaID)
