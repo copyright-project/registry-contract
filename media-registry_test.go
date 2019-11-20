@@ -33,3 +33,11 @@ func TestAreRegistered(t *testing.T) {
 		require.Equal(t, areRegistered("id1,id2,id3"), "110")
 	})
 }
+
+func TestRecordRetrieval(t *testing.T) {
+	InServiceScope(nil, nil, func(m Mockery) {
+		_init()
+		registerMedia("id1", "test-metadata")
+		require.Equal(t, getMedia("id1"), "test-metadata")
+	})
+}
