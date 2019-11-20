@@ -10,15 +10,16 @@ import (
 )
 
 var SYSTEM = sdk.Export(_init)
-var PUBLIC = sdk.Export(registerMedia, areRegistered)
+var PUBLIC = sdk.Export(registerMedia, areRegistered, getMedia)
 
 var OWNER_KEY = []byte("__CONTRACT_OWNER__")
+var INDEX_KEY = []byte("__INDEX__")
 
 func _init() {
 	state.WriteBytes(OWNER_KEY, address.GetSignerAddress())
 }
 
-func _isRegistered(id string) bool {
+func isRegistered(id string) bool {
 	key := []byte(id)
 	return state.ReadString(key) != ""
 }
@@ -26,7 +27,7 @@ func _isRegistered(id string) bool {
 func areRegistered(ids string) string {
 	res := ""
 	for _, id := range strings.Split(ids, ",") {
-		if _isRegistered(id) {
+		if isRegistered(id) {
 			res = res + "1"
 		} else {
 			res = res + "0"
@@ -40,10 +41,15 @@ func registerMedia(mediaID, metadata string) {
 		panic("Only contract owner can register media")
 	}
 	key := []byte(mediaID)
-	if _isRegistered(mediaID) {
+	if isRegistered(mediaID) {
 		panic("The record already exists")
 	}
 	state.WriteString(key, metadata)
+	state.WriteString(INDEX_KEY, "|"+state.ReadString(INDEX_KEY))
+}
+
+func getMedia(id string) string {
+	return state.ReadString([]byte(id))
 }
 
 func main() {}
