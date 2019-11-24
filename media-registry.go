@@ -11,6 +11,7 @@ import (
 
 var SYSTEM = sdk.Export(_init)
 var PUBLIC = sdk.Export(registerMedia)
+var EVENTS = sdk.Export(log)
 
 var OWNER_KEY = []byte("__CONTRACT_OWNER__")
 
@@ -26,5 +27,3 @@ func registerMedia(mediaID, phash, copyrights, timestamp, imageURL string) {
 	}
 	events.EmitEvent(log, mediaID, phash, copyrights, timestamp, imageURL)
 }
-
-func main() {}
