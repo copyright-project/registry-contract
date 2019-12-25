@@ -13,6 +13,7 @@ var SYSTEM = sdk.Export(_init)
 var PUBLIC = sdk.Export(registerMedia, areRegistered, getMedia)
 
 var OWNER_KEY = []byte("__CONTRACT_OWNER__")
+var PHASHES_KEY = []byte("__PHASHES__")
 
 func _init() {
 	state.WriteBytes(OWNER_KEY, address.GetSignerAddress())
@@ -35,7 +36,7 @@ func areRegistered(ids string) string {
 	return res
 }
 
-func registerMedia(mediaID, metadata string) {
+func registerMedia(mediaID, pHash, metadata string) {
 	if !bytes.Equal(state.ReadBytes(OWNER_KEY), address.GetSignerAddress()) {
 		panic("Only contract owner can register media")
 	}
@@ -44,6 +45,7 @@ func registerMedia(mediaID, metadata string) {
 		panic("The record already exists")
 	}
 	state.WriteString(key, metadata)
+	state.WriteString(PHASHES_KEY, ","+pHash)
 }
 
 func getMedia(id string) string {
