@@ -37,6 +37,12 @@ func areRegistered(ids string) string {
 }
 
 func registerMedia(mediaID, pHash, metadata string) {
+	if len(mediaID) == 0 {
+		panic("Media ID must be provided")
+	}
+	if len(pHash) == 0 {
+		panic("PHash must be provided")
+	}
 	if !bytes.Equal(state.ReadBytes(OWNER_KEY), address.GetSignerAddress()) {
 		panic("Only contract owner can register media")
 	}
