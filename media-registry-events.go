@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+
 	"github.com/orbs-network/orbs-contract-sdk/go/sdk/v1"
 	"github.com/orbs-network/orbs-contract-sdk/go/sdk/v1/address"
 	"github.com/orbs-network/orbs-contract-sdk/go/sdk/v1/events"
@@ -20,6 +22,9 @@ func _init() {
 func imageRegistered() {}
 
 func registerMedia(pHash, imageURL, postedAt, copyrights, binaryHash string) {
+	if !bytes.Equal(state.ReadBytes(OWNER_KEY), address.GetSignerAddress()) {
+		panic("Only contract owner can register media")
+	}
 	events.EmitEvent(imageRegistered)
 }
 
