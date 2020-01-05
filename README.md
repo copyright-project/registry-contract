@@ -2,24 +2,25 @@
 > Registry smart contract
 
 ## API
-### `registerMedia(mediaID, metadata string)`
-Method that registers a metadata (JSON object) with the given media id. <br />
-Metadata object structure:
-```ts
-[media_id: string]: {
-    imageUrl: string
-    postedAt: string
-    copyrightAttribution: string
-    hash: string
-}
-```
+### `registerMedia(pHash, imageURL, postedAt, copyrights, binaryHash string)`
+Method registers provided media information in the registry.
 
-### `areRegistered(ids string) string`
-Method that checks whether the list of passed media ids are already registered. <br />
-Due to limitations of smart contracts API, arguments and response are in the following string format. <br />
-E.g.
-```js
-areRegistered("id1,id2,id3") 
-// "101"
+|Argument Name|Argument Type|Description|
+|-------------|-------------|-----------|
+|pHash|String|Media's perceptual hash (64 bit)|
+|imageUrl|String|Media URL|
+|postedAt|String|Timestamp when media was created/posted|
+|copyrights|String|Media's copyright attribution|
+|binaryHash|String|Binary hash of media's file|
+
+Media's phash, depending on the used algorithm, might produce collisions. Therefore, if media with the same phash is registered, at least binary hash must be different, otherwise it will result in exception.
+
+### `getMedia(pHash string) []string`
+Returns the list of registered medias corresponding to a given phash. 
+E.g. 
 ```
-`1` means that id corresponding to a position of `1` is registered,`0` - id is not registered.
+[
+    "https://some-url-1,123456789,by me,eQYhYzRyWJjPjzpfRFEgmotaFetHsbZRjxAwnwekrBEmfdzdcEkXBAkjQZLCtTMt", 
+    "https://some-url-2,123456789,by me,TCoaNatyyiNKAReKJyiXJrscctNswYNsGRussVmaozFZBsbOJiFQGZsnwTKSmVoi"
+]
+```
