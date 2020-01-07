@@ -36,8 +36,8 @@ func isValidURL(url string) bool {
 }
 
 func validateInput(pHash, imageURL, postedAt, copyrights, binaryHash string) {
-	if len(pHash) != 64 {
-		panic("Invalid phash: length should be 64")
+	if len(pHash) == 0 {
+		panic("Image phash is not provided")
 	}
 	if !isValidURL(imageURL) {
 		panic("Image URL is invalid")

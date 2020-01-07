@@ -32,9 +32,8 @@ func TestPanicWithInvalidArguments(t *testing.T) {
 	InServiceScope(nil, []byte("some-signer"), func(m Mockery) {
 		require.Panics(t, func() {
 			_init()
-			pHash := generateStringOfLength(63)
 			binaryHash := generateStringOfLength(64)
-			registerMedia(pHash, "https://some-url", "123456789", "by me", binaryHash)
+			registerMedia("", "https://some-url", "123456789", "by me", binaryHash)
 		})
 		require.Panics(t, func() {
 			_init()
