@@ -67,6 +67,7 @@ func TestRecordRetrieval(t *testing.T) {
 		_init()
 		pHash := generateStringOfLength(64)
 		binaryHash := generateStringOfLength(64)
+		m.MockEmitEvent(mediaRegistered, pHash)
 		registerMedia(pHash, "https://some-url", "123456789", "by me", binaryHash)
 		require.Equal(t, []string{"https://some-url,123456789,by me," + binaryHash}, getMedia(pHash))
 	})
@@ -77,6 +78,7 @@ func TestRegisterRecordWithSamePHash(t *testing.T) {
 		pHash := generateStringOfLength(64)
 		binaryHash1 := generateStringOfLength(64)
 		binaryHash2 := generateStringOfLength(64)
+		m.MockEmitEvent(mediaRegistered, pHash)
 		registerMedia(pHash, "https://some-url-1", "123456789", "by me", binaryHash1)
 		registerMedia(pHash, "https://some-url-2", "123456789", "by me", binaryHash2)
 		require.Equal(t, []string{

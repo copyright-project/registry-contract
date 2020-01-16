@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"strings"
 
+	"github.com/orbs-network/orbs-contract-sdk/go/sdk/v1/events"
+
 	"github.com/orbs-network/orbs-contract-sdk/go/sdk/v1"
 	"github.com/orbs-network/orbs-contract-sdk/go/sdk/v1/address"
 	"github.com/orbs-network/orbs-contract-sdk/go/sdk/v1/state"
@@ -11,9 +13,9 @@ import (
 
 var SYSTEM = sdk.Export(_init)
 var PUBLIC = sdk.Export(registerMedia, getMedia)
+var EVENT = sdk.Export(mediaRegistered)
 
 var OWNER_KEY = []byte("__CONTRACT_OWNER__")
-var PHASHES_KEY = []byte("__PHASHES__")
 
 func _init() {
 	state.WriteBytes(OWNER_KEY, address.GetSignerAddress())
@@ -34,6 +36,8 @@ func isValidURL(url string) bool {
 	}
 	return true
 }
+
+func mediaRegistered(pHash string) {}
 
 func validateInput(pHash, imageURL, postedAt, copyrights, binaryHash string) {
 	if len(pHash) == 0 {
@@ -65,10 +69,7 @@ func registerMedia(pHash, imageURL, postedAt, copyrights, binaryHash string) {
 
 	key := []byte(pHash)
 	state.WriteString(key, state.ReadString(key)+"|"+record)
-
-	if keys := state.ReadString(PHASHES_KEY); !strings.Contains(keys, pHash) {
-		state.WriteString(PHASHES_KEY, keys+"|"+pHash)
-	}
+	events.EmitEvent(mediaRegistered, pHash)
 }
 
 func getMedia(pHash string) []string {
